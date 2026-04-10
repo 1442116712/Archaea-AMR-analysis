@@ -13,7 +13,7 @@ df$coverage <- ifelse(df$coverage > 1, 1, df$coverage)
 
 # Calculate the midpoint location for MGEs
 # Logic: Start position + half of the length
-df$midpoint_MGE <- df$ORF_Start + (df$ORF_End - df$ORF_Start) / 2
+df$midpoint_MGE <- df$start + (df$stop - df$start) / 2
 
 # De-duplication Function
 remove_overlapping_MGEs <- function(df) {
@@ -22,8 +22,7 @@ remove_overlapping_MGEs <- function(df) {
   # Initialize a logical vector: TRUE means keep, FALSE means remove
   keep <- rep(TRUE, nrow(df))
   
-  # Optimization: Identify groups (Contig + Strand) that have at least 2 entries
-  # Updated variable names: specific_contig, strand
+  # Optimization: Identify groups (specific_contig + strand) that have at least 2 entries
   groups <- df %>% 
     group_by(specific_contig, strand) %>% 
     summarise(n = n(), .groups = 'drop') %>% 
@@ -54,13 +53,12 @@ remove_overlapping_MGEs <- function(df) {
         dist <- abs(df_sub$midpoint_MGE[i] - df_sub$midpoint_MGE[j])
         
         # Calculate the allowed distance (Threshold for overlap: 2 bp buffer)
-        # Updated variable names: query_sequence_length
         allowed <- (df_sub$query_sequence_length[i] + df_sub$query_sequence_length[j]) / 2 - 2
         
         # If an overlap is detected (distance < allowed)
         if (!is.na(dist) && dist < allowed) {
-          # Competition: Retain the hit with the higher Bitscore
-          if (df_sub$Bitscore[i] < df_sub$Bitscore[j]) {
+          # Competition: Retain the hit with the higher bitscore (lowercase)
+          if (df_sub$bitscore[i] < df_sub$bitscore[j]) {
             keep[idx_i] <- FALSE # Mark i for removal
           } else {
             keep[idx_j] <- FALSE # Mark j for removal
@@ -73,13 +71,10 @@ remove_overlapping_MGEs <- function(df) {
   # Return the filtered data frame, removing the helper index column
   return(df[keep, -which(names(df) == "orig_idx")])
 }
-
 # Execute Filtering
 df_final <- remove_overlapping_MGEs(df)
-
 # Final cleanup: Remove any entirely empty or NA rows
 df_final <- df_final %>% filter_all(any_vars(. !="" & !is.na(.)))
-
 write.xlsx(df_final, 'C:/Users/CFL/Desktop/UK/PhD/output_file_MGE.xlsx')
 
 
