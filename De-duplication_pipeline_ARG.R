@@ -1,17 +1,24 @@
 library(readxl)
 library(openxlsx)
 library(dplyr)
+
+# Load data
 df <- read_excel('C:/Users/CFL/Desktop/1.xlsx', sheet = "Sheet2")
 
+# Ensure gene_length is numeric
 df$gene_length <- as.numeric(df$gene_length)
-# filter subject coverage < 60%
+
+# Filter subject coverage < 60%
 df$coverage <- (df$length) / df$gene_length 
 df <- df[df$coverage >= 0.6, ]
+# Cap coverage at 1.0
 df$coverage <- ifelse(df$coverage > 1, 1, df$coverage)
 
-# determine strand and centre
+# Determine strand and midpoint
+# If send > sstart, it's on the Forward (F) strand; otherwise, Reverse (R)
 df$strand <- ifelse(df$send - df$sstart > 0, "F", "R")
-df$center_ARG <- df$qstart + (df$qend - df$qstart) / 2
+# Calculate the midpoint of the ARG on the query sequence
+df$midpoint_ARG <- df$qstart + (df$qend - df$qstart) / 2
 
 remove_overlapping_genes <- function(df) {
   # Pre-calculate original indices to avoid using the expensive which() function inside loops
@@ -47,8 +54,8 @@ remove_overlapping_genes <- function(df) {
         # CRITICAL: If either gene has already been marked for removal, skip this comparison
         if (!keep[idx_i] | !keep[idx_j]) next
         
-        # Calculate the physical distance between gene centers
-        dist <- abs(sub_df$center_ARG[i] - sub_df$center_ARG[j])
+        # Calculate the physical distance between gene midpoints
+        dist <- abs(sub_df$midpoint_ARG[i] - sub_df$midpoint_ARG[j])
         # Determine the threshold for overlap (allowing a 4bp buffer)
         allowed_dist <- (sub_df$length[i] + sub_df$length[j]) / 2 - 4
         
@@ -69,8 +76,8 @@ remove_overlapping_genes <- function(df) {
   return(df[keep, -which(names(df) == "orig_idx")]) 
 }
 
-# Output the filter result
+# Run the de-duplication function
 filtered_df <- remove_overlapping_genes(df)
 
-# Print results
+# Export the results to a new Excel file
 write.xlsx(filtered_df, 'C:/Users/CFL/Desktop/UK/PhD/AMR/output_file.xlsx')
