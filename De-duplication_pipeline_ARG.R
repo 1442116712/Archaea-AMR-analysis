@@ -56,8 +56,8 @@ remove_overlapping_genes <- function(df) {
         
         # Calculate the physical distance between gene midpoints
         dist <- abs(sub_df$midpoint_ARG[i] - sub_df$midpoint_ARG[j])
-        # Determine the threshold for overlap (allowing a 4bp buffer)
-        allowed_dist <- (sub_df$length[i] + sub_df$length[j]) / 2 - 4
+        # Determine the threshold for overlap (allowing a 3bp buffer)
+        allowed_dist <- (sub_df$length[i] + sub_df$length[j]) / 2 - 3
         
         # If the actual distance is less than the threshold, an overlap is confirmed
         if (!is.na(dist) && dist < allowed_dist) {
