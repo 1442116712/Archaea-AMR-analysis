@@ -6,7 +6,7 @@ BiocManager::install("ComplexHeatmap")
 library(ComplexHeatmap)
 library(circlize)
 
-col_fun = circlize::colorRamp2(c(0, 1.5, 3), c("#000004", "#B63679", "#FCFDBF"))
+col_fun = circlize::colorRamp2(c(0,1.5,3), c("white", "#B2182B","#67000D"))
 # MAGs Heatmap ####
 # input data
 data1 <- read.table('C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/MAGs.txt',
@@ -19,10 +19,10 @@ rowsum1 <- read.table('C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/MAGs_sum.txt',
 
 bar1 = rowAnnotation(
   ARG_occurrence = anno_barplot(rowsum1,
-                                  baseline = 0, bar_width = 0.9, width = unit(1.3, "cm"), gp = gpar(col = "white", fill = "#20B2AA"), 
+                                  baseline = 0, bar_width = 0.9, width = unit(1.3, "cm"), gp = gpar(col = "white", fill = "#2171B5"), 
                                   border = F, border_gp = gpar(lwd = 2), 
                                   axis_param = list(side = "bottom", at = c(0,10,20), labels = c("0","10","20"))), # direction = "reverse" - can reverse the direction 
-  show_annotation_name = T, annotation_name_gp = gpar(fontsize = 8), annotation_name_side = "bottom", annotation_name_rot = 90)
+  show_annotation_name = T, annotation_name_gp = gpar(fontsize = 8), annotation_name_side = "bottom", annotation_name_rot = 270)
 
 
 ## Bottom annotation
@@ -32,7 +32,7 @@ bar2 <- HeatmapAnnotation(
   show_annotation_name = T,annotation_name_gp = gpar(fontsize = 8), annotation_name_side = "left",annotation_name_rot = 0,
   ARG_diversity = anno_barplot(    
     ARG_type1, 
-    baseline = 0, bar_width = 0.9, height = unit(1.5, "cm"), gp = gpar(col = "white", fill = "#6495ED"), # bar setting
+    baseline = 0, bar_width = 0.9, height = unit(1.5, "cm"), gp = gpar(col = "white", fill = "#4292C6"), # bar setting
     border = F, border_gp = gpar(lwd = 2), 
     axis_param = list(direction = "reverse", side = "left", at = c(0,3,6), # axis parameter direction = "reverse", 
                       labels = c("","3","6")),ylim = c(0, 6)), gap = unit(1.5, "mm"))
@@ -48,7 +48,7 @@ ARG1 <- prevalence_matrix1[ ,2]
 bar3 <- HeatmapAnnotation(
   ARG_prevalence = anno_barplot(
     cbind(prevalence1$Meta, prevalence1$ARG),
-    gp = gpar(fill = c("#3CB371", "#FF69B4")), 
+    gp = gpar(fill = c("#08519C", "#FF69B4")), 
     beside = TRUE,                        
     bar_width = 0.85, height = unit(1.8, "cm"),
     border = F, 
@@ -82,6 +82,7 @@ Heatmap1 = Heatmap(df1,col = col_fun,
                    row_dend_width = unit(0.5, "cm"), 
                    column_title = "MAGs", 
                    row_title = "",
+                   border_gp = gpar(col = "black", lwd = 1),
                    row_title_side = "right", 
                    column_title_side = "bottom", 
                    column_title_rot = F,
@@ -114,7 +115,7 @@ rowsum2 <- read.table('C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/PCGs_sum.txt',
 
 bar4 = rowAnnotation(
   ARG_occurrence = anno_barplot(rowsum2,
-                                  baseline = 0, bar_width = 0.9, width = unit(1.5, "cm"), gp = gpar(col = "white", fill = "#20B2AA"), 
+                                  baseline = 0, bar_width = 0.9, width = unit(1.5, "cm"), gp = gpar(col = "white", fill = "#2171B5"), 
                                   border = F, border_gp = gpar(lwd = 2), 
                                   axis_param = list(at = c(0,50,100), direction = "reverse", side = "bottom",labels = c("0","50","100"))), # direction = "reverse" - can reverse the direction 
   show_annotation_name = T, annotation_name_gp = gpar(fontsize = 8), annotation_name_side = "bottom", annotation_name_rot = 90)
@@ -126,7 +127,7 @@ bar5 <- HeatmapAnnotation(
   show_annotation_name = F,annotation_name_gp = gpar(fontsize = 8), annotation_name_side = "right",annotation_name_rot = 0,
   ARG_diversity = anno_barplot(    
     ARG_type2, 
-    baseline = 0, bar_width = 0.9, height = unit(1.5, "cm"), gp = gpar(col = "white", fill = "#6495ED"), # bar setting
+    baseline = 0, bar_width = 0.9, height = unit(1.5, "cm"), gp = gpar(col = "white", fill = "#4292C6"), # bar setting
     border = F, border_gp = gpar(lwd = 2), 
     axis_param = list(direction = "reverse", side = "right", at = c(0,3,6), # axis parameter direction = "reverse", 
                       labels = c("0","3","6")),ylim = c(0, 6)), gap = unit(1.5, "mm"))
@@ -141,7 +142,7 @@ ARG_detect2 <- prevalence_matrix2[ ,2]
 bar6 <- HeatmapAnnotation(
   ARG_prevalence = anno_barplot(
     cbind(prevalence2$Meta, prevalence2$ARG),
-    gp = gpar(fill = c("#3CB371", "#FF69B4")), 
+    gp = gpar(fill = c("#08519C", "#FF69B4")), 
     beside = TRUE,                        
     bar_width = 0.85, height = unit(1.8, "cm"),
     border = F,
@@ -173,6 +174,7 @@ Heatmap2 = Heatmap(df2,col = col_fun,
                    column_dend_height = unit(0.5, "cm"), 
                    row_dend_width = unit(0.5, "cm"), 
                    column_title = "PCGs", 
+                   border_gp = gpar(col = "black", lwd = 1),
                    row_title = "",
                    row_title_side = "left", 
                    column_title_side = "bottom", 
@@ -202,8 +204,8 @@ Heatmap0
 draw(Heatmap0, ht_gap = unit(30, "mm"))
 
 png(
-  filename = "C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/Heatmap.png",
-  width = 10,       
+  filename = "C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/Heatmap_white.png",
+  width = 12,       
   height = 6,       
   units = "in",     
   res = 600,        
@@ -216,8 +218,8 @@ dev.off()
 
 
 # legend setting  ####
-labels <- c("Number of total genomes in each class","Number of resistance genomes in each class")
-label_colors <- c("#3CB371", "#FF69B4")
+labels <- c("Total genomes in each class","ARG-carrying genomes in each class")
+label_colors <- c("#08519C", "#FF69B4")
 lgd <- Legend(labels = labels[1:2], labels_gp = gpar(fontsize = 8, fontface = "bold", col = "black"),
               legend_gp = gpar(fill = label_colors[1:2],cex = 0.5, frot = 1.2), 
               title_gp = gpar(fontsize = 10, fontface = "bold", col = "black"),
@@ -248,12 +250,12 @@ lgd = Legend(
   title_position = "topcenter", 
   labels_gp = gpar(fontsize = 10, fontface = "bold"),
   title_gp = gpar(fontsize = 10, fontface = "bold"),
-  grid_width = unit(0.4, "cm"),
+  grid_width = unit(0.6, "cm"),
   legend_height = unit(4, "cm")
 )
 draw(lgd)
 png(
-  filename = "C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/Legend_HD.png",
+  filename = "C:/Users/CFL/Desktop/UK/PhD/AMR/Archaea/Legend_HD1.png",
   width = 4,     
   height = 2,
   units = "in",
