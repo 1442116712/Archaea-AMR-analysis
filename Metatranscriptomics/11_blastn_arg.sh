@@ -25,8 +25,8 @@ SAMPLE=${SAMPLES[${SLURM_ARRAY_TASK_ID}]}
 
 META=/users/40335635/sharedscratch/SRA/downloads/meta
 ARG_BLASTDB=/users/40335635/sharedscratch/SRA/downloads/blastndb/blastn_db
-CONTIGS=${META}/assembly/${SAMPLE}/transcripts.fasta
-BLAST_DIR=${META}/blastn_arg/${SAMPLE}
+CONTIGS=${META}/assembly/${SAMPLE}/transcripts_min300.fasta
+BLAST_DIR=${META}/blastn_arg_min300/${SAMPLE}
 mkdir -p ${BLAST_DIR}
 
 echo "=========================================="
@@ -48,7 +48,7 @@ blastn -query ${CONTIGS} -db ${ARG_BLASTDB} \
 
 awk -F'\t' '$16 >= 60' ${BLAST_RAW} > ${BLAST_FILT}
 
-echo "raw HSPs:   $(wc -l < ${BLAST_RAW})"
-echo "filt HSPs:  $(wc -l < ${BLAST_FILT})"
+echo "raw HSPs:    $(wc -l < ${BLAST_RAW})"
+echo "filt HSPs:   $(wc -l < ${BLAST_FILT})"
 echo "unique ARGs: $(cut -f2 ${BLAST_FILT} | sort -u | wc -l)"
 echo "Done at $(date)"
