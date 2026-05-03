@@ -25,8 +25,8 @@ SAMPLE=${SAMPLES[${SLURM_ARRAY_TASK_ID}]}
 
 META=/users/40335635/sharedscratch/SRA/downloads/meta
 mRNA_DIR=${META}/mRNA
-CONTIGS=${META}/assembly/${SAMPLE}/transcripts.fasta
-ALIGN_DIR=${META}/contig_arg/${SAMPLE}
+CONTIGS=${META}/assembly/${SAMPLE}/transcripts_min300.fasta
+ALIGN_DIR=${META}/contig_arg_min300/${SAMPLE}
 mkdir -p ${ALIGN_DIR}
 
 echo "=========================================="
@@ -36,7 +36,6 @@ echo "=========================================="
 module load apps/bowtie2/2.5.2/gcc-14.1.0
 module load apps/samtools/1.17/gcc-14.1.0
 
-# Detect SE/PE
 R1=${mRNA_DIR}/${SAMPLE}_mRNA_fwd.fq.gz
 R2=${mRNA_DIR}/${SAMPLE}_mRNA_rev.fq.gz
 SE=${mRNA_DIR}/${SAMPLE}_mRNA.fq.gz
@@ -52,7 +51,6 @@ if [[ -s ${BAM}.bai ]]; then
   echo "[skip] already done"; exit 0
 fi
 
-# Build index
 if [[ ! -s ${CTG_IDX}.1.bt2 && ! -s ${CTG_IDX}.1.bt2l ]]; then
   bowtie2-build --threads 16 ${CONTIGS} ${CTG_IDX}
 fi
