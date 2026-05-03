@@ -29,12 +29,13 @@ NODES=${KAIJU_DB}/nodes.dmp
 NAMES=${KAIJU_DB}/names.dmp
 FMI=${KAIJU_DB}/kaiju_db_refseq_ref.fmi
 
-CONTIGS=${META}/assembly/${SAMPLE}/transcripts.fasta
-KAIJU_DIR=${META}/kaiju_out/${SAMPLE}_contigs
+CONTIGS=${META}/assembly/${SAMPLE}/transcripts_min300.fasta
+KAIJU_DIR=${META}/kaiju_out/${SAMPLE}_contigs_min300
 mkdir -p ${KAIJU_DIR}
 
 echo "=========================================="
 echo " ${SAMPLE} on $(hostname) at $(date)"
+echo " Input: $(grep -c '^>' ${CONTIGS}) filtered contigs"
 echo "=========================================="
 
 source /users/40335635/sharedscratch/miniconda3/etc/profile.d/conda.sh
@@ -58,15 +59,20 @@ kaiju-addTaxonNames -t ${NODES} -n ${NAMES} -p \
 
 awk -F'\t' '$1=="C" && $NF ~ /Archaea;/ {print $2}' ${KNAMED} > ${ARCH_CTG}
 
-# Summary tables
-for RANK in phylum genus species; do
-  kaiju2table -t ${NODES} -n ${NAMES} -r ${RANK} \
-              -l superkingdom,phylum,class,order,family,genus,species \
-              -o ${KAIJU_DIR}/${SAMPLE}_contigs_kaiju_${RANK}.tsv \
-              ${KOUT}
-done
-
+# 统计
 echo ""
-echo "Total contigs    : $(grep -c '^>' ${CONTIGS})"
+echo "Total contigs    : $(wc -l < ${KOUT})"
 echo "Archaeal contigs : $(wc -l < ${ARCH_CTG})"
+awk -F'\t' '
+  $1=="C" && $NF ~ /Archaea;/   {a++}
+  $1=="C" && $NF ~ /Bacteria;/  {b++}
+  $1=="C" && $NF ~ /Eukaryota;/ {e++}
+  $1=="C" && $NF ~ /Viruses;/   {v++}
+  $1=="U"                        {u++}
+  END {
+    printf "  Bacteria:    %d\n  Archaea:     %d\n  Eukaryota:   %d\n  Viruses:     %d\n  Unclassified: %d\n",
+           b+0, a+0, e+0, v+0, u+0
+  }
+' ${KNAMED}
+echo ""
 echo "Done at $(date)"
