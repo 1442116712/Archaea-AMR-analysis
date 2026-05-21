@@ -7,7 +7,7 @@ df <- read_excel('C:/Users/CFL/Desktop/UK/PhD/1.xlsx', sheet = "Sheet1")
 
 # Calculate coverage and filter (Threshold: 90%)
 # Updated variable names to lowercase: query_sequence_length, subject_sequence_length
-df$coverage <- df$query_sequence_length / df$subject_sequence_length 
+df$coverage <- (df$end_of_alignment_in_query - df$start_of_alignment_in_query + 1) / df$subject_sequence_length 
 df <- df[df$coverage >= 0.9, ]
 df$coverage <- ifelse(df$coverage > 1, 1, df$coverage)
 
