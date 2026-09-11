@@ -188,6 +188,10 @@ The pipeline follows the manuscript flow. **Each block lists the code, its input
 - **First author / code maintainer**: Ziming Wu — zwu18@qub.ac.uk
 - **Corresponding senior author**: Dr Linda B. Oyama — l.oyama@qub.ac.uk
 
+- ## License
+
+Released under the **MIT License** (see `LICENSE` file). Please cite the paper when reusing the code.
+
 School of Biological Sciences, Institute for Global Food Security
 Queen's University Belfast, Belfast BT9 5DL, United Kingdom
 
