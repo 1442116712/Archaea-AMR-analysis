@@ -1,0 +1,17 @@
+target	reference	reference_type	MILC	delta_GC3_pp
+Msmithii_tetC	Methanobrevibacter_smithii	archaeal_host	2.121	53.2
+Msmithii_tetC	Aeromonas_salmonicida	bacterial	0.747	7.4
+Msmithii_tetC	Enterobacter_hormaechei	bacterial	0.626	4.2
+Msmithii_tetC	Escherichia_coli	bacterial	0.688	1.8
+Mmazei_TEM	Methanosarcina_mazei	archaeal_host	0.642	0.1
+Mmazei_TEM	Bacillus_subtilis	bacterial	0.535	0.7
+Mmazei_TEM	Escherichia_coli	bacterial	0.951	12.9
+Mmazei_TEM	Klebsiella_pneumoniae	bacterial	1.020	21.3
+Mmazei_catA	Methanosarcina_mazei	archaeal_host	0.754	5.9
+Mmazei_catA	Salmonella_enterica	bacterial	0.677	9.2
+Mmazei_catA	Escherichia_coli	bacterial	0.690	12.3
+Mmazei_catA	Klebsiella_pneumoniae	bacterial	0.861	21.9
+Sislandicus_copR	Saccharolobus_islandicus	archaeal_host	0.471	3.6
+Sislandicus_copR	Escherichia_coli	bacterial	1.480	30.1
+Sislandicus_copR	Bacillus_subtilis	bacterial	1.320	15.2
+Sislandicus_copR	Salmonella_enterica	bacterial	1.550	32.4
